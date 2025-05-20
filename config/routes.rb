@@ -16,10 +16,11 @@ Rails.application.routes.draw do
                                         }
       end
     end
+    
+    namespace :api do
+      get "balance" => "balance#show"
+    end
   end
 
-  namespace :api do
-    get "balance" => "balance#show"
-  end
  
 end
