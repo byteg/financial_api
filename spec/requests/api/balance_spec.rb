@@ -82,6 +82,34 @@ RSpec.describe "Api::Balances", type: :request do
           expect(response).to have_http_status(:success)
           expect(JSON.parse(response.body)["amount_cents"]).to eq(0)
         end
+
+        it "does not accept negative amount" do
+          expect {
+            post "/api/balance/transfer.json", params: { amount_cents: -100, user_id: other_user.id }
+          }.to change { user.reload.amount_cents }.by(0).and change { other_user.reload.amount_cents }.by(0)
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(JSON.parse(response.body)["error"]).to eq("Amount must be greater than 0")
+        end
+      end
+
+      context "when sender's balance is insufficient" do
+        let(:sender_balance) { 0 }
+
+        it "returns http success" do
+          expect {
+            post "/api/balance/transfer.json", params: { amount_cents: 100, user_id: other_user.id }
+          }.to change { user.reload.amount_cents }.by(0).and change { other_user.reload.amount_cents }.by(0)
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(JSON.parse(response.body)["error"]).to eq("Insufficient balance")
+        end
+      end
+
+      context "when counterparty is not found" do
+        let(:sender_balance) { 100 }
+        it "returns http not found" do
+          post "/api/balance/transfer.json", params: { amount_cents: 100, user_id: 999 }
+          expect(response).to have_http_status(:not_found)
+        end
       end
     end
 
