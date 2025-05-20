@@ -1,4 +1,4 @@
 class UserSerializer < Blueprinter::Base
   identifier :id
-  fields :email
+  fields :email, :amount_cents
 end

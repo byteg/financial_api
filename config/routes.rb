@@ -15,8 +15,11 @@ Rails.application.routes.draw do
                                           registrations: 'api/registrations'
                                         }
       end
-
-
     end
   end
+
+  namespace :api do
+    get "balance" => "balance#show"
+  end
+ 
 end
