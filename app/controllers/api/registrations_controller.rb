@@ -5,7 +5,7 @@ class Api::RegistrationsController < Devise::RegistrationsController
       unless resource.errors.blank?
         render json: resource.errors, status: :unprocessable_entity
       else
-        render json: resource, status: :created
+        render json: UserSerializer.render(resource), status: :created
       end
     end
   
