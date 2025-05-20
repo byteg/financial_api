@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_20_124507) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_20_145858) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "balance_transactions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "from_id"
+    t.integer "amount_cents", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["from_id"], name: "index_balance_transactions_on_from_id"
+    t.index ["user_id"], name: "index_balance_transactions_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", null: false
@@ -23,4 +33,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_20_124507) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["jti"], name: "index_users_on_jti", unique: true
   end
+
+  add_foreign_key "balance_transactions", "users"
 end

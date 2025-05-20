@@ -10,5 +10,6 @@ class DeviseCreateUsers < ActiveRecord::Migration[8.0]
     end
     add_index :users, :email,                unique: true
     add_index :users, :jti, unique: true
+    add_check_constraint :users, "amount_cents >= 0", name: "amount_cents_check"
   end
 end
