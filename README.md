@@ -1,5 +1,7 @@
 # README
 
+* NOTICE: master.key was intentionally added to the repository for JWT authentication to work.
+
 * User registration:
   ```
   curl -v http://localhost:3000/api/users.json \
