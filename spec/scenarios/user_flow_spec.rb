@@ -8,7 +8,7 @@ RSpec.describe "User flow", type: :request do
       post "/api/users.json", params: { user: attributes_for(:user) }
       second_jwt_token = response.headers['Authorization']
       second_user_id = JSON.parse(response.body)['id']
-      
+
       expect(first_jwt_token).not_to eq(second_jwt_token)
 
       post "/api/balance/deposit.json", params: { amount_cents: 100 }, headers: { 'Authorization' => first_jwt_token }
