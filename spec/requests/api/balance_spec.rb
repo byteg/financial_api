@@ -67,7 +67,7 @@ RSpec.describe "Api::Balances", type: :request do
 
   describe "#transfer" do
     let(:other_user) { create(:user, amount_cents: 0) }
-    
+
     context "when user is authenticated" do
       let(:user) { create(:user, amount_cents: sender_balance) }
       let(:default_headers) { authenticated_user_header(user) }

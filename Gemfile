@@ -37,15 +37,15 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
-  gem 'rspec-rails', '~> 8.0.0'
-  gem 'rspec-default_http_header'
+  gem "rspec-rails", "~> 8.0.0"
+  gem "rspec-default_http_header"
 
-  gem 'factory_bot_rails'
-  gem 'faker'
+  gem "factory_bot_rails"
+  gem "faker"
 end
 
-gem 'devise'
-gem 'devise-jwt'
-gem 'oj'
-gem 'pg'
-gem 'blueprinter'
+gem "devise"
+gem "devise-jwt"
+gem "oj"
+gem "pg"
+gem "blueprinter"

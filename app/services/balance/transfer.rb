@@ -4,11 +4,11 @@ class Balance::Transfer
       @amount_cents = amount_cents.to_i
       @to_user_id = to_user_id
     end
-  
+
     def call
       raise ArgumentError, "Amount must be greater than 0" if @amount_cents <= 0
       User.transaction do
-        User.lock(true).where(id: [@from_user.id, @to_user_id]).to_a #perform lock
+        User.lock(true).where(id: [ @from_user.id, @to_user_id ]).to_a # perform lock
         raise ArgumentError, "Insufficient balance" if @from_user.amount_cents < @amount_cents
 
         to_user = User.find(@to_user_id)
@@ -19,5 +19,4 @@ class Balance::Transfer
         to_user.balance_transactions.create!(amount_cents: @amount_cents, counterparty: @from_user)
       end
     end
-  end
-  
+end

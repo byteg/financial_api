@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     defaults format: :json do
       scope :api do
         devise_for :users, controllers: {
-                                          registrations: 'api/registrations'
+                                          registrations: "api/registrations"
                                         }
       end
     end
@@ -24,6 +24,4 @@ Rails.application.routes.draw do
       post "balance/transfer" => "balance#transfer"
     end
   end
-
- 
 end
