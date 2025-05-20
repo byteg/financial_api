@@ -325,4 +325,7 @@ Devise.setup do |config|
        user: [:json]
      }
   end
+  config.warden do |warden|
+    warden.scope_defaults :user, store: false
+  end
 end

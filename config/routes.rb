@@ -12,10 +12,11 @@ Rails.application.routes.draw do
     defaults format: :json do
       scope :api do
         devise_for :users, controllers: {
-                                          sessions: 'api/sessions',
                                           registrations: 'api/registrations'
                                         }
       end
+
+
     end
   end
 end
