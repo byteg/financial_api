@@ -1,24 +1,40 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+* User registration:
+  ```
+  curl -v http://localhost:3000/api/users.json \
+  -H "Content-Type: application/json" \
+  -d '{"user": {"email": "user1@example.com"}}'
+  ```
+  In return there will be a header
+  ```
+  authorization: Bearer <JWT token>
+  ```
+* Balance request:
+  ```
+  curl -v http://localhost:3000/api/balance.json \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <JWT token>"
+  ```
+* Balance deposit:
+  ```
+  curl -v http://localhost:3000/api/balance/deposit.json \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <JWT token>" \
+  -d '{"amount_cents": 100}'
+  ```
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Balance withdraw:
+  ```
+  curl -v http://localhost:3000/api/balance/withdraw.json \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <JWT token>" \
+  -d '{"amount_cents": 100}'
+  ```
+* Balance transfer:
+  ```
+  curl -v http://localhost:3000/api/balance/transfer.json \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <JWT token>" \
+  -d '{"amount_cents": 100, "user_id": 2}'
+  ```
