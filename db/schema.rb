@@ -10,17 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_20_145858) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_20_145859) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "balance_transactions", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.integer "from_id"
+    t.integer "counterparty_id"
     t.integer "amount_cents", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["from_id"], name: "index_balance_transactions_on_from_id"
+    t.index ["counterparty_id"], name: "index_balance_transactions_on_counterparty_id"
     t.index ["user_id"], name: "index_balance_transactions_on_user_id"
   end
 

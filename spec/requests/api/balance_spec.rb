@@ -50,7 +50,7 @@ RSpec.describe "Api::Balances", type: :request do
 
       it "returns http success" do
         expect {
-          post "/api/balance/withdraw.json", params: { amount_cents: 100 }, headers: default_headers
+          post "/api/balance/withdraw.json", params: { amount_cents: 100 }
         }.to change { user.reload.amount_cents }.by(-100)
         expect(response).to have_http_status(:success)
         expect(JSON.parse(response.body)["amount_cents"]).to eq(0)
@@ -60,6 +60,34 @@ RSpec.describe "Api::Balances", type: :request do
     context "when user is not authenticated" do
       it "returns http unauthorized" do
         post "/api/balance/withdraw.json", params: { amount_cents: 100 }
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe "#transfer" do
+    let(:other_user) { create(:user, amount_cents: 0) }
+    
+    context "when user is authenticated" do
+      let(:user) { create(:user, amount_cents: sender_balance) }
+      let(:default_headers) { authenticated_user_header(user) }
+
+      context "when sender's balance is sufficient" do
+        let(:sender_balance) { 100 }
+
+        it "returns http success" do
+          expect {
+            post "/api/balance/transfer.json", params: { amount_cents: 100, user_id: other_user.id }
+          }.to change { user.reload.amount_cents }.by(-100).and change { other_user.reload.amount_cents }.by(100)
+          expect(response).to have_http_status(:success)
+          expect(JSON.parse(response.body)["amount_cents"]).to eq(0)
+        end
+      end
+    end
+
+    context "when user is not authenticated" do
+      it "returns http unauthorized" do
+        post "/api/balance/transfer.json", params: { amount_cents: 100, user_id: other_user.id }
         expect(response).to have_http_status(:unauthorized)
       end
     end

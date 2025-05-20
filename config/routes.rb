@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       get "balance" => "balance#show"
       post "balance/deposit" => "balance#deposit"
       post "balance/withdraw" => "balance#withdraw"
+      post "balance/transfer" => "balance#transfer"
     end
   end
 

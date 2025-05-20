@@ -12,4 +12,9 @@ class Api::BalanceController < ApplicationController
     Balance::Withdraw.new(current_user, params[:amount_cents]).call
     render json: UserSerializer.render(current_user)
   end
+
+  def transfer
+    Balance::Transfer.new(current_user, params[:amount_cents], params[:user_id]).call
+    render json: UserSerializer.render(current_user)
+  end
 end
