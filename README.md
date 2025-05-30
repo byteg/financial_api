@@ -12,8 +12,8 @@
   * Install dependencies and prepare database:
   ```
   bundle
-  rails db:create
-  rails db:migrate
+  ./bin/rails db:create
+  ./bin/rails db:migrate
   ```
   * Start server:
   ```
@@ -62,7 +62,7 @@
 * Testing
   * Prepare databse:
   ```
-  RAILS_ENV=test rails db:migrate
+  RAILS_ENV=test ./bin/rails db:migrate
   ```
   * Run tests:
   ```
