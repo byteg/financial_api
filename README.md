@@ -9,7 +9,7 @@
   or
   rbenv install 3.4.4
   ```
-  * Install dependencies and prepare database:
+  * Install dependencies and prepare the database:
   ```
   bundle
   ./bin/rails db:create
@@ -60,7 +60,7 @@
   ```
 
 * Testing
-  * Prepare databse:
+  * Prepare the database:
   ```
   RAILS_ENV=test ./bin/rails db:migrate
   ```
