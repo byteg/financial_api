@@ -10,18 +10,20 @@ Rails.application.routes.draw do
 
   constraints format: :json do
     defaults format: :json do
-      scope :api do
+      scope :"api/v1" do
         devise_for :users, controllers: {
-                                          registrations: "api/registrations"
+                                          registrations: "api/v1/registrations"
                                         }
       end
     end
 
     namespace :api do
-      get "balance" => "balance#show"
-      post "balance/deposit" => "balance#deposit"
-      post "balance/withdraw" => "balance#withdraw"
-      post "balance/transfer" => "balance#transfer"
+      namespace :v1 do
+        get "balance" => "balance#show"
+        post "balance/deposit" => "balance#deposit"
+        post "balance/withdraw" => "balance#withdraw"
+        post "balance/transfer" => "balance#transfer"
+      end
     end
   end
 end

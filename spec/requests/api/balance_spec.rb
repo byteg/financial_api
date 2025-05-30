@@ -7,7 +7,7 @@ RSpec.describe "Api::Balances", type: :request do
       let(:default_headers) { authenticated_user_header(user) }
 
       it "returns http success" do
-        get "/api/balance.json"
+        get "/api/v1/balance.json"
         expect(response).to have_http_status(:success)
         expect(JSON.parse(response.body)["amount_cents"]).to eq(100)
       end
@@ -15,7 +15,7 @@ RSpec.describe "Api::Balances", type: :request do
 
     context "when user is not authenticated" do
       it "returns http unauthorized" do
-        get "/api/balance.json"
+        get "/api/v1/balance.json"
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -28,7 +28,7 @@ RSpec.describe "Api::Balances", type: :request do
 
       it "returns http success" do
         expect {
-          post "/api/balance/deposit.json", params: { amount_cents: 100 }, headers: default_headers
+          post "/api/v1/balance/deposit.json", params: { amount_cents: 100 }, headers: default_headers
         }.to change { user.reload.amount_cents }.by(100)
         expect(response).to have_http_status(:success)
         expect(JSON.parse(response.body)["amount_cents"]).to eq(200)
@@ -37,7 +37,7 @@ RSpec.describe "Api::Balances", type: :request do
 
     context "when user is not authenticated" do
       it "returns http unauthorized" do
-        post "/api/balance/deposit.json", params: { amount_cents: 100 }
+        post "/api/v1/balance/deposit.json", params: { amount_cents: 100 }
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -50,7 +50,7 @@ RSpec.describe "Api::Balances", type: :request do
 
       it "returns http success" do
         expect {
-          post "/api/balance/withdraw.json", params: { amount_cents: 100 }
+          post "/api/v1/balance/withdraw.json", params: { amount_cents: 100 }
         }.to change { user.reload.amount_cents }.by(-100)
         expect(response).to have_http_status(:success)
         expect(JSON.parse(response.body)["amount_cents"]).to eq(0)
@@ -59,7 +59,7 @@ RSpec.describe "Api::Balances", type: :request do
 
     context "when user is not authenticated" do
       it "returns http unauthorized" do
-        post "/api/balance/withdraw.json", params: { amount_cents: 100 }
+        post "/api/v1/balance/withdraw.json", params: { amount_cents: 100 }
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -77,7 +77,7 @@ RSpec.describe "Api::Balances", type: :request do
 
         it "returns http success" do
           expect {
-            post "/api/balance/transfer.json", params: { amount_cents: 100, user_id: other_user.id }
+            post "/api/v1/balance/transfer.json", params: { amount_cents: 100, user_id: other_user.id }
           }.to change { user.reload.amount_cents }.by(-100).and change { other_user.reload.amount_cents }.by(100)
           expect(response).to have_http_status(:success)
           expect(JSON.parse(response.body)["amount_cents"]).to eq(0)
@@ -85,7 +85,7 @@ RSpec.describe "Api::Balances", type: :request do
 
         it "does not accept negative amount" do
           expect {
-            post "/api/balance/transfer.json", params: { amount_cents: -100, user_id: other_user.id }
+            post "/api/v1/balance/transfer.json", params: { amount_cents: -100, user_id: other_user.id }
           }.to change { user.reload.amount_cents }.by(0).and change { other_user.reload.amount_cents }.by(0)
           expect(response).to have_http_status(:unprocessable_entity)
           expect(JSON.parse(response.body)["error"]).to eq("Amount must be greater than 0")
@@ -97,7 +97,7 @@ RSpec.describe "Api::Balances", type: :request do
 
         it "returns http success" do
           expect {
-            post "/api/balance/transfer.json", params: { amount_cents: 100, user_id: other_user.id }
+            post "/api/v1/balance/transfer.json", params: { amount_cents: 100, user_id: other_user.id }
           }.to change { user.reload.amount_cents }.by(0).and change { other_user.reload.amount_cents }.by(0)
           expect(response).to have_http_status(:unprocessable_entity)
           expect(JSON.parse(response.body)["error"]).to eq("Insufficient balance")
@@ -107,7 +107,7 @@ RSpec.describe "Api::Balances", type: :request do
       context "when counterparty is not found" do
         let(:sender_balance) { 100 }
         it "returns http not found" do
-          post "/api/balance/transfer.json", params: { amount_cents: 100, user_id: 999 }
+          post "/api/v1/balance/transfer.json", params: { amount_cents: 100, user_id: 999 }
           expect(response).to have_http_status(:not_found)
         end
       end
@@ -115,7 +115,7 @@ RSpec.describe "Api::Balances", type: :request do
 
     context "when user is not authenticated" do
       it "returns http unauthorized" do
-        post "/api/balance/transfer.json", params: { amount_cents: 100, user_id: other_user.id }
+        post "/api/v1/balance/transfer.json", params: { amount_cents: 100, user_id: other_user.id }
         expect(response).to have_http_status(:unauthorized)
       end
     end

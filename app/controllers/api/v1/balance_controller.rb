@@ -1,4 +1,4 @@
-class Api::BalanceController < ApplicationController
+class Api::V1::BalanceController < ApplicationController
   def show
     render json: UserSerializer.render(current_user)
   end
