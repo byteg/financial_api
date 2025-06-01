@@ -2,6 +2,14 @@
 
 * NOTICE: master.key was intentionally added to the repository for JWT authentication to work.
 
+* Database configuration:
+  ```
+  CREATE ROLE developer WITH LOGIN PASSWORD '12345678';
+  ```
+  ```
+  ALTER ROLE developer CREATEDB;
+  ```
+  
 * Installation:
   * Install ruby 3.4.4 if it's not installed:
   ```
