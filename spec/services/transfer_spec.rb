@@ -6,7 +6,7 @@ RSpec.describe "Balance::Transfer" do
       user = create(:user, amount_cents: 100)
       other_user = create(:user, amount_cents: 0)
       transfer = Balance::Transfer.new(user, 100, other_user.email)
-      transfer.call
+      expect { transfer.call }.to change(BalanceTransaction, :count).by(2)
       expect(user.reload.amount_cents).to eq(0)
       expect(other_user.reload.amount_cents).to eq(100)
     end

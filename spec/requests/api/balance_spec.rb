@@ -29,7 +29,7 @@ RSpec.describe "Api::Balances", type: :request do
       it "returns http success" do
         expect {
           post "/api/v1/balance/deposit.json", params: { amount_cents: 100 }, headers: default_headers
-        }.to change { user.reload.amount_cents }.by(100)
+        }.to change { user.reload.amount_cents }.by(100).and change { BalanceTransaction.count }.by(1)
         expect(response).to have_http_status(:success)
         expect(JSON.parse(response.body)["amount_cents"]).to eq(200)
       end
@@ -51,7 +51,7 @@ RSpec.describe "Api::Balances", type: :request do
       it "returns http success" do
         expect {
           post "/api/v1/balance/withdraw.json", params: { amount_cents: 100 }
-        }.to change { user.reload.amount_cents }.by(-100)
+        }.to change { user.reload.amount_cents }.by(-100).and change { BalanceTransaction.count }.by(1)
         expect(response).to have_http_status(:success)
         expect(JSON.parse(response.body)["amount_cents"]).to eq(0)
       end
@@ -78,7 +78,7 @@ RSpec.describe "Api::Balances", type: :request do
         it "returns http success" do
           expect {
             post "/api/v1/balance/transfer.json", params: { amount_cents: 100, email: other_user.email }
-          }.to change { user.reload.amount_cents }.by(-100).and change { other_user.reload.amount_cents }.by(100)
+          }.to change { user.reload.amount_cents }.by(-100).and change { other_user.reload.amount_cents }.by(100).and change { BalanceTransaction.count }.by(2)
           expect(response).to have_http_status(:success)
           expect(JSON.parse(response.body)["amount_cents"]).to eq(0)
         end
@@ -86,7 +86,7 @@ RSpec.describe "Api::Balances", type: :request do
         it "does not accept negative amount" do
           expect {
             post "/api/v1/balance/transfer.json", params: { amount_cents: -100, email: other_user.email }
-          }.to change { user.reload.amount_cents }.by(0).and change { other_user.reload.amount_cents }.by(0)
+          }.to change { user.reload.amount_cents }.by(0).and change { other_user.reload.amount_cents }.by(0).and change { BalanceTransaction.count }.by(0)
           expect(response).to have_http_status(:unprocessable_entity)
           expect(JSON.parse(response.body)["error"]).to eq("Amount must be greater than 0")
         end
@@ -98,7 +98,7 @@ RSpec.describe "Api::Balances", type: :request do
         it "returns http success" do
           expect {
             post "/api/v1/balance/transfer.json", params: { amount_cents: 100, email: other_user.email }
-          }.to change { user.reload.amount_cents }.by(0).and change { other_user.reload.amount_cents }.by(0)
+          }.to change { user.reload.amount_cents }.by(0).and change { other_user.reload.amount_cents }.by(0).and change { BalanceTransaction.count }.by(0)
           expect(response).to have_http_status(:unprocessable_entity)
           expect(JSON.parse(response.body)["error"]).to eq("Insufficient balance")
         end

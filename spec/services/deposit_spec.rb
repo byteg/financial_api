@@ -5,7 +5,7 @@ RSpec.describe "Balance::Deposit" do
     it "deposits the amount" do
       user = create(:user, amount_cents: 0)
       deposit = Balance::Deposit.new(user, 100)
-      deposit.call
+      expect { deposit.call }.to change(BalanceTransaction, :count).by(1)
       expect(user.amount_cents).to eq(100)
     end
 

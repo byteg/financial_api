@@ -5,7 +5,7 @@ RSpec.describe "Balance::Withdraw" do
     it "withdraws the amount" do
       user = create(:user, amount_cents: 100)
       withdraw = Balance::Withdraw.new(user, 100)
-      withdraw.call
+      expect { withdraw.call }.to change(BalanceTransaction, :count).by(1)
       expect(user.amount_cents).to eq(0)
     end
 
