@@ -19,7 +19,7 @@ default: &default
 
 development:
   <<: *default
-  database: financial_development
+  database: financial_development2
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -33,7 +33,7 @@ test:
 production:
   primary:
     <<: *default
-    database: storage/production.sqlite3
+    database: financial
   cache:
     <<: *default
     database: storage/production_cache.sqlite3

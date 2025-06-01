@@ -7,7 +7,7 @@ RSpec.describe "User flow", type: :request do
 
     post "/api/v1/users.json", params: { user: attributes_for(:user) }
     second_jwt_token = response.headers['Authorization']
-    second_user_id = JSON.parse(response.body)['id']
+    second_user_email = JSON.parse(response.body)['email']
 
     expect(first_jwt_token).not_to eq(second_jwt_token)
 
@@ -15,7 +15,7 @@ RSpec.describe "User flow", type: :request do
     expect(response).to have_http_status(:success)
     expect(JSON.parse(response.body)["amount_cents"]).to eq(100)
 
-    post "/api/v1/balance/transfer.json", params: { amount_cents: 50, user_id: second_user_id }, headers: { 'Authorization' => first_jwt_token }
+    post "/api/v1/balance/transfer.json", params: { amount_cents: 50, email: second_user_email }, headers: { 'Authorization' => first_jwt_token }
     expect(response).to have_http_status(:success)
     expect(JSON.parse(response.body)["amount_cents"]).to eq(50)
 
