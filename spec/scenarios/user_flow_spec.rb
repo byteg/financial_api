@@ -1,7 +1,33 @@
 require 'rails_helper'
 
 RSpec.describe "User flow", type: :request do
-  it "registers, deposits, transfers funds, withdraws, requests balance" do
+  it 'registers, deposits and requests balance' do
+    post "/api/v1/users.json", params: { user: attributes_for(:user) }
+    jwt_token = response.headers['Authorization']
+
+    post "/api/v1/balance/deposit.json", params: { amount_cents: 100 }, headers: { 'Authorization' => jwt_token }
+    expect(response).to have_http_status(:success)
+    expect(JSON.parse(response.body)["amount_cents"]).to eq(100)
+
+    get "/api/v1/balance.json", headers: { 'Authorization' => jwt_token }
+    expect(response).to have_http_status(:success)
+    expect(JSON.parse(response.body)["amount_cents"]).to eq(100)
+  end
+
+  it 'registers, deposits and withdraws' do
+    post "/api/v1/users.json", params: { user: attributes_for(:user) }
+    jwt_token = response.headers['Authorization']
+
+    post "/api/v1/balance/deposit.json", params: { amount_cents: 100 }, headers: { 'Authorization' => jwt_token }
+    expect(response).to have_http_status(:success)
+    expect(JSON.parse(response.body)["amount_cents"]).to eq(100)
+
+    post "/api/v1/balance/withdraw.json", params: { amount_cents: 50 }, headers: { 'Authorization' => jwt_token }
+    expect(response).to have_http_status(:success)
+    expect(JSON.parse(response.body)["amount_cents"]).to eq(50)
+  end
+
+  it "registers, deposits, transfers funds and requests balance" do
     post "/api/v1/users.json", params: { user: attributes_for(:user) }
     first_jwt_token = response.headers['Authorization']
 
@@ -19,13 +45,9 @@ RSpec.describe "User flow", type: :request do
     expect(response).to have_http_status(:success)
     expect(JSON.parse(response.body)["amount_cents"]).to eq(50)
 
-    post "/api/v1/balance/withdraw.json", params: { amount_cents: 50 }, headers: { 'Authorization' => first_jwt_token }
-    expect(response).to have_http_status(:success)
-    expect(JSON.parse(response.body)["amount_cents"]).to eq(0)
-
     get "/api/v1/balance.json", headers: { 'Authorization' => first_jwt_token }
     expect(response).to have_http_status(:success)
-    expect(JSON.parse(response.body)["amount_cents"]).to eq(0)
+    expect(JSON.parse(response.body)["amount_cents"]).to eq(50)
 
     get "/api/v1/balance.json", headers: { 'Authorization' => second_jwt_token }
     expect(response).to have_http_status(:success)
