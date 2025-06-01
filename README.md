@@ -9,7 +9,7 @@
   ```
   ALTER ROLE developer CREATEDB;
   ```
-  
+
 * Installation:
   * Install ruby 3.4.4 if it's not installed:
   ```
@@ -30,7 +30,7 @@
 
 * User registration:
   ```
-  curl -v http://localhost:3000/api/users.json \
+  curl -v http://localhost:3000/api/v1/users.json \
   -H "Content-Type: application/json" \
   -d '{"user": {"email": "user1@example.com"}}'
   ```
@@ -40,13 +40,13 @@
   ```
 * Balance request:
   ```
-  curl -v http://localhost:3000/api/balance.json \
+  curl -v http://localhost:3000/api/v1/balance.json \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <JWT token>"
   ```
 * Balance deposit:
   ```
-  curl -v http://localhost:3000/api/balance/deposit.json \
+  curl -v http://localhost:3000/api/v1/balance/deposit.json \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <JWT token>" \
   -d '{"amount_cents": 100}'
@@ -54,17 +54,17 @@
 
 * Balance withdraw:
   ```
-  curl -v http://localhost:3000/api/balance/withdraw.json \
+  curl -v http://localhost:3000/api/v1/balance/withdraw.json \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <JWT token>" \
   -d '{"amount_cents": 100}'
   ```
 * Balance transfer:
   ```
-  curl -v http://localhost:3000/api/balance/transfer.json \
+  curl -v http://localhost:3000/api/v1/balance/transfer.json \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <JWT token>" \
-  -d '{"amount_cents": 100, "user_id": 2}'
+  -d '{"amount_cents": 100, "email": "user2@example.com"}'
   ```
 
 * Testing
