@@ -15,7 +15,7 @@ class Balance::Withdraw
     end
   end
 
-  private 
+  private
 
   attr_reader :user, :amount_cents
 end

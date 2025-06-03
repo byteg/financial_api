@@ -20,7 +20,7 @@ class Balance::Transfer
 
         from_user.decrement!(:amount_cents, amount_cents)
         to_user.increment!(:amount_cents, amount_cents)
-        
+
         from_user.balance_transactions.create!(amount_cents: amount_cents * -1, counterparty: to_user, transaction_type: :transfer)
         to_user.balance_transactions.create!(amount_cents: amount_cents, counterparty: from_user, transaction_type: :transfer)
       end
@@ -28,7 +28,7 @@ class Balance::Transfer
       from_user
     end
 
-    private 
+    private
 
     attr_accessor :current_user, :from_user, :amount_cents, :to_user_email, :to_user
 end
